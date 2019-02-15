@@ -1,4 +1,6 @@
 require_relative "base.rb"
 
-class Match < Base
+class Match < BaseRecord
+  def self.build(opts = {})
+  end
 end

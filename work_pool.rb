@@ -21,8 +21,8 @@ class WorkPool
   private
     def run_loop
       loop do
-        sleep 1
         (@queue.pop.call if @queue.size > 0) rescue nil
+        sleep 1
       end
     end
 end

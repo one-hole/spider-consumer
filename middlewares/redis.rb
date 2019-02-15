@@ -13,4 +13,7 @@ module Middlewares
       db: 12
     )
   end
+
+  def self.hltv_consumer
+  end
 end

@@ -1,22 +1,14 @@
 require 'rubygems'
 require 'pry'
-require_relative "models/match"
+
+Dir[File.dirname(__FILE__) + "/models/*.rb"].map { |file| require file }
+Dir[File.dirname(__FILE__) + "/middlewares/*.rb"].map { |file| require file }
+
 require_relative "config/config"
 require_relative "work_pool"
-require_relative "middlewares/redis"
 
-match = Match.new
-config = Config.new
-
-class Task
-  def call
-    puts "+++++-"
-  end
-end
-
-task = Task.new
-
-WorkPool.add(task)
+hltv = Hltv.new
+WorkPool.instance
 
 puts '-------------'
 
