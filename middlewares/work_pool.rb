@@ -1,9 +1,9 @@
 class WorkPool
   @@instance = nil
-
+  
   attr_accessor :threads, :queue
 
-  def initialize(size = 2)
+  def initialize(size = 16)
     @queue, @threads = ::Queue.new, Array.new
     size.times do
       @threads << Thread.new(&method(:run_loop))
@@ -21,8 +21,8 @@ class WorkPool
   private
     def run_loop
       loop do
-        (@queue.pop.call if @queue.size > 0) rescue nil
         sleep 1
+        (@queue.pop.call if @queue.size > 0) rescue nil
       end
     end
 end

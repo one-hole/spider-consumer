@@ -10,3 +10,10 @@ env APP_ENV=development ruby main.rb
 ```bash
 env APP_ENV=production ruby main.rb
 ```
+---
+
+Console Env - Dev Only
+
+```
+./bin/console
+```

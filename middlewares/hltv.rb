@@ -1,28 +1,35 @@
-require_relative "redis"
-require_relative "../work_pool"
-
 # User Story
 # 这里需要从 Redis 轮询数据、同时推入 WorkPool
-
-class String
-  def call
-    puts "call str"
-  end
-end
-
 class Hltv
   attr_accessor :thread, :redis_client
 
   def initialize
-    @thread = Thread.new(&method(:polling))
     @redis_client = Middlewares.redis_client
+    @thread = Thread.new(&method(:run_subscribe))
   end
 
   private
-    def polling
+    def run_subscribe
+      @redis_client.subscribe("hltv-matches-channel") do |on|
+        on.message do |channel, message|
+          WorkPool.add(HltvService.new(message))
+        end
+      end
+    end
+
+    def run_loop
       loop do
-        sleep 2
-        WorkPool.instance.queue << "abc"
+        sleep 10 # 这里每分钟检查入库一次
+        polling
+      end
+    end
+
+    def polling
+      puts "Now polling redis"
+      if @redis_client.hlen('hltv-matches') > 0
+        values = @redis_client.hvals('hltv-matches')
+        values.each { |val| WorkPool.add(HltvService.new(val)) }
+        # @redis_client.del('hltv-matches')
       end
     end
 end

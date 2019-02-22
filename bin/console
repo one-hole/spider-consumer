@@ -1,0 +1,1 @@
+env APP_ENV=development ruby console.rb

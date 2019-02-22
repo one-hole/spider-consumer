@@ -6,7 +6,7 @@ default: &default
 
 development:
   <<: *default
-  database: rw-datacenter-dev
+  database: core_dev
   username: root
   host: 127.0.0.1
 

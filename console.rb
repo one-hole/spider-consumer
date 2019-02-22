@@ -6,7 +6,4 @@ Dir[File.dirname(__FILE__) + "/middlewares/*.rb"].map { |file| require file }
 
 require_relative "config/config"
 
-hltv = Hltv.new
-WorkPool.instance
-
 binding.pry
