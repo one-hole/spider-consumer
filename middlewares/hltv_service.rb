@@ -7,7 +7,7 @@ class HltvService
   end
 
   def call
-    puts "call --------"
+    puts @opts
     load_league
     load_teams
     build_battle
@@ -29,13 +29,25 @@ class HltvService
     def build_battle
       return unless (@league && @team1 && @team2)
       @battle = Battle.find_by(offical_id: @opts["id"])
-
+      
       if @battle
-        Battle.update(
-
+        return if (@battle.start_time == Time.at(@opts["date"].to_i / 1000) && @battle.live == @opts["live"])
+        @battle.update(
+          start_time: Time.at(@opts["date"].to_i / 1000),
+          live:       @opts["live"]
         )
       else
-        Battle.create_by_opts(@opts)
+        Battle.create(
+          left_team:  @team1,
+          right_team: @team2,
+          league:     @league,
+          status:     0,
+          game_id:    2,
+          start_time: Time.at(@opts["date"].to_i / 1000),
+          offical_id: @opts["id"],
+          live:       @opts["live"],
+          format:     @opts["format"].match(/\d/).to_s.to_i
+        )
       end
     end
 

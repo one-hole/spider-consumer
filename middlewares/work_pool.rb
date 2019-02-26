@@ -3,7 +3,7 @@ class WorkPool
   
   attr_accessor :threads, :queue
 
-  def initialize(size = 16)
+  def initialize(size = 1)
     @queue, @threads = ::Queue.new, Array.new
     size.times do
       @threads << Thread.new(&method(:run_loop))
