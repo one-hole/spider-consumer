@@ -29,9 +29,9 @@ class HltvService
     def build_battle
       return unless (@league && @team1 && @team2)
       @battle = Battle.find_by(offical_id: @opts["id"])
-      
+
       if @battle
-        return if (@battle.start_time == Time.at(@opts["date"].to_i / 1000) && @battle.live == @opts["live"])
+        return if (@battle.start_time == Time.at(@opts["date"].to_i / 1000) && (@battle.live == @opts["live"]))
         @battle.update(
           start_time: Time.at(@opts["date"].to_i / 1000),
           live:       @opts["live"]
