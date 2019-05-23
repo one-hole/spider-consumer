@@ -8,8 +8,6 @@ module Middlewares
 
   def self.redis_client
     @@redis_client ||= Redis.new(
-      # connect_timeout: 10,
-      # read_timeout:    60,
       host:            "127.0.0.1",
       port:            "6379",
       db:              12,
@@ -19,6 +17,14 @@ module Middlewares
     )
   end
 
-  def self.hltv_consumer
+  def self.new_client
+    Redis.new(
+      host:            "127.0.0.1",
+      port:            "6379",
+      db:              12,
+      reconnect_attempts:  10,
+      reconnect_delay:     2,
+      reconnect_delay_max: 10.0
+    )
   end
 end

@@ -1,13 +1,15 @@
 class HltvService
 
-  attr_accessor :opts
+  attr_accessor :opts, :redis_client
 
   def initialize(opts = nil)
     @opts = JSON.parse(opts)
+
+    puts @opts
+    @redis_client = Middlewares.new_client
   end
 
   def call
-    puts @opts
     load_league
     load_teams
     build_battle
@@ -27,6 +29,7 @@ class HltvService
     end
 
     def build_battle
+
       return unless (@league && @team1 && @team2)
       @battle = Battle.find_by(offical_id: @opts["id"])
 
@@ -37,7 +40,7 @@ class HltvService
           live:       @opts["live"]
         )
       else
-        Battle.create(
+        battle = Battle.create(
           left_team:  @team1,
           right_team: @team2,
           league:     @league,
@@ -48,6 +51,7 @@ class HltvService
           live:       @opts["live"],
           format:     @opts["format"].match(/\d/).to_s.to_i
         )
+        # 这里需要发送创建通知
       end
     end
 

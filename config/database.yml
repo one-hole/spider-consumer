@@ -3,6 +3,7 @@ default: &default
   encoding: utf8
   pool: 20
   password: mypassword
+  port: 3310
 
 development:
   <<: *default
