@@ -9,6 +9,7 @@ class Hltv
   end
 
   private
+    # 因为数据需要实时、所以还是走 Pub/Sub 比较合适
     def run_subscribe
       @redis_client.subscribe("hltv-matches-channel") do |on|
         on.message do |channel, message|
@@ -17,19 +18,11 @@ class Hltv
       end
     end
 
-    def run_loop
-      loop do
-        sleep 10 # 这里每分钟检查入库一次
-        polling
-      end
-    end
-
-    def polling
-      puts "Now polling redis"
-      if @redis_client.hlen('hltv-matches') > 0
-        values = @redis_client.hvals('hltv-matches')
-        values.each { |val| WorkPool.add(HltvService.new(val)) }
-        # @redis_client.del('hltv-matches')
+    def run_live_subscribe
+      @redis_client.subscribe("hltv-live-matches-channel") do |on|
+        on.message do |channel, message|
+          WorkPool.add(HltvLiveService.new(message))
+        end
       end
     end
 end

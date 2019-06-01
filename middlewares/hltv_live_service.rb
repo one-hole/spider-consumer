@@ -5,6 +5,17 @@
   Email:  zengtao@risewinter.com
 =end
 
-class HltvLiveService
+=begin
+  Match
+  - Match 的比分需要更新
+  Round
+  - Round 需要更新胜负、原因
+  PlayerMatch
   
+=end
+
+class HltvLiveService
+  def run
+    
+  end
 end

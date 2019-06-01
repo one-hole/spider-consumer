@@ -12,8 +12,6 @@ class HltvService
 
   def initialize(opts = nil)
     @opts = JSON.parse(opts)
-
-    puts @opts
     @redis_client = Middlewares.new_client
   end
 
