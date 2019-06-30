@@ -18,10 +18,12 @@ class WorkPool
     instance.queue << task
   end
 
+  # 这里之后该用 Mutex 和 WaitGroup 的方式
+  # Mutex 保证了「代码区间」一次只有一个线程在「执行」
   private
     def run_loop
       loop do
-        sleep 1
+        sleep 0.1
         (@queue.pop.call if @queue.size > 0) rescue nil
       end
     end

@@ -22,6 +22,7 @@ Console Env - Dev Only
 
 * Sub
   * hltv-matches-channel  HLTV 的 matches api
+  * aiesports-csgo-websocket HLTV 的 Live 数据推送
 
 * Pub
   * hltv-matches-created  新创建的比赛

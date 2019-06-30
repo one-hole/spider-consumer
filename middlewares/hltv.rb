@@ -12,14 +12,14 @@ class Hltv
     # 因为数据需要实时、所以还是走 Pub/Sub 比较合适
     def run_subscribe
       @redis_client.subscribe("hltv-matches-channel") do |on|
-        on.message do |channel, message|
+        on.message do |channel, message|          
           WorkPool.add(HltvService.new(message))
         end
       end
     end
 
     def run_live_subscribe
-      @redis_client.subscribe("hltv-live-matches-channel") do |on|
+      @redis_client.subscribe("aiesports-csgo-websocket") do |on|
         on.message do |channel, message|
           WorkPool.add(HltvLiveService.new(message))
         end

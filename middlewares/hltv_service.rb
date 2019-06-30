@@ -41,12 +41,21 @@ class HltvService
       return unless (@league && @team1 && @team2)
       @battle = Battle.find_by(offical_id: @opts["id"])
 
+      # 如果是 Live 状态
       if @battle
+        puts @battle.offical_id
+        puts @opts["live"]
         return if (@battle.start_time == Time.at(@opts["date"].to_i / 1000) && (@battle.live == @opts["live"]))
-        @battle.update(
-          start_time: Time.at(@opts["date"].to_i / 1000),
-          live:       @opts["live"]
-        )
+
+        if true == @opts["live"] 
+          @battle.update({live: true})
+        else 
+          @battle.update(
+            start_time: Time.at(@opts["date"].to_i / 1000),
+            live:       @opts["live"]
+          )
+        end
+
       else
         # 目前发现正在进行中的比赛不会有时间、也就是上面逻辑要判断一下
         battle = Battle.create(
